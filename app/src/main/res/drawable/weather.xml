@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="0" android:drawable="@drawable/biz_plugin_weather_qing" />
+    <item android:maxLevel="1" android:drawable="@drawable/biz_plugin_weather_baoyu" />
+    <item android:maxLevel="2" android:drawable="@drawable/biz_plugin_weather_dabaoyu" />
+    <item android:maxLevel="3" android:drawable="@drawable/biz_plugin_weather_daxue" />
+    <item android:maxLevel="4" android:drawable="@drawable/biz_plugin_weather_dayu" />
+    <item android:maxLevel="5" android:drawable="@drawable/biz_plugin_weather_duoyun" />
+    <item android:maxLevel="6" android:drawable="@drawable/biz_plugin_weather_leizhenyu" />
+    <item android:maxLevel="7" android:drawable="@drawable/biz_plugin_weather_leizhenyubingbao" />
+    <item android:maxLevel="8" android:drawable="@drawable/biz_plugin_weather_baoxue" />
+    <item android:maxLevel="9" android:drawable="@drawable/biz_plugin_weather_shachenbao" />
+    <item android:maxLevel="10" android:drawable="@drawable/biz_plugin_weather_tedabaoyu" />
+    <item android:maxLevel="11" android:drawable="@drawable/biz_plugin_weather_wu" />
+    <item android:maxLevel="12" android:drawable="@drawable/biz_plugin_weather_xiaoxue" />
+    <item android:maxLevel="13" android:drawable="@drawable/biz_plugin_weather_xiaoyu" />
+    <item android:maxLevel="14" android:drawable="@drawable/biz_plugin_weather_yin" />
+    <item android:maxLevel="15" android:drawable="@drawable/biz_plugin_weather_yujiaxue" />
+    <item android:maxLevel="16" android:drawable="@drawable/biz_plugin_weather_zhenxue" />
+    <item android:maxLevel="17" android:drawable="@drawable/biz_plugin_weather_zhenyu" />
+    <item android:maxLevel="18" android:drawable="@drawable/biz_plugin_weather_zhongxue" />
+    <item android:maxLevel="19" android:drawable="@drawable/biz_plugin_weather_zhongyu" />
+</level-list>

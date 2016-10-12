@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="0" android:drawable="@drawable/biz_plugin_weather_0_50" />
+    <item android:maxLevel="1" android:drawable="@drawable/biz_plugin_weather_51_100" />
+    <item android:maxLevel="2" android:drawable="@drawable/biz_plugin_weather_101_150" />
+    <item android:maxLevel="3" android:drawable="@drawable/biz_plugin_weather_151_200" />
+    <item android:maxLevel="4" android:drawable="@drawable/biz_plugin_weather_201_300" />
+    <item android:maxLevel="5" android:drawable="@drawable/biz_plugin_weather_greater_300" />
+</level-list>

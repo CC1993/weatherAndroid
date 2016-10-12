@@ -1,9 +1,7 @@
 package com.example.houzhe.weatheronclass;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -99,29 +97,93 @@ public class MainActivity extends Activity implements View.OnClickListener {
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-        String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
-        Log.d("myWeather", cityCode);
+//        SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+//        String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
+//        Log.d("myWeather", cityCode);
+//
+//        //初始化为一个城市
+//        if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
+//            Log.d("myWeather", "网络可用");
+//            queryWeatherCode(cityCode);
+//        } else {
+//            Log.d("myWeather", "网络不可用");
+//            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+//        }
 
-        //初始化为一个城市
-        if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
-            Log.d("myWeather", "网络可用");
-            queryWeatherCode(cityCode);
-        } else {
-            Log.d("myWeather", "网络不可用");
-            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+        city_name_Tv.setText("N/A");
+        cityTv.setText("N/A");
+        timeTv.setText("N/A");
+        humidityTv.setText("N/A");
+        pmDataTv.setText("N/A");
+        pmQualityTv.setText("N/A");
+        weekTv.setText("N/A");
+        temperatureTv.setText("N/A");
+        climateTv.setText("N/A");
+        windTv.setText("N/A");
+    }
+
+    void initWeatherImg(TodayWeather todayWeather){
+        if(todayWeather.getType().equals("晴")){
+            weatherImg.setImageLevel(0);
+        }else if (todayWeather.getType().equals("暴雪")){
+            weatherImg.setImageLevel(8);
+        }else if (todayWeather.getType().equals("暴雨")){
+            weatherImg.setImageLevel(1);
+        }else if (todayWeather.getType().equals("大暴雨")){
+            weatherImg.setImageLevel(2);
+        }else if (todayWeather.getType().equals("大雪")){
+            weatherImg.setImageLevel(3);
+        }else if (todayWeather.getType().equals("大雨")){
+            weatherImg.setImageLevel(4);
+        }else if (todayWeather.getType().equals("多云")){
+            weatherImg.setImageLevel(5);
+        }else if (todayWeather.getType().equals("雷阵雨")){
+            weatherImg.setImageLevel(6);
+        }else if (todayWeather.getType().equals("雷阵雨冰雹")){
+            weatherImg.setImageLevel(7);
+        }else if (todayWeather.getType().equals("沙尘暴")){
+            weatherImg.setImageLevel(9);
+        }else if (todayWeather.getType().equals("特大暴雨")){
+            weatherImg.setImageLevel(10);
+        }else if (todayWeather.getType().equals("雾")){
+            weatherImg.setImageLevel(11);
+        }else if (todayWeather.getType().equals("小雪")){
+            weatherImg.setImageLevel(12);
+        }else if (todayWeather.getType().equals("小雨")){
+            weatherImg.setImageLevel(13);
+        }else if (todayWeather.getType().equals("阴")){
+            weatherImg.setImageLevel(14);
+        }else if (todayWeather.getType().equals("雨加雪")){
+            weatherImg.setImageLevel(15);
+        }else if (todayWeather.getType().equals("阵雪")){
+            weatherImg.setImageLevel(16);
+        }else if (todayWeather.getType().equals("阵雨")){
+            weatherImg.setImageLevel(17);
+        }else if (todayWeather.getType().equals("中雪")){
+            weatherImg.setImageLevel(18);
+        }else if (todayWeather.getType().equals("中雨")){
+            weatherImg.setImageLevel(19);
+        }else{
+            weatherImg.setImageLevel(0);
         }
+    }
 
-//        city_name_Tv.setText("N/A");
-//        cityTv.setText("N/A");
-//        timeTv.setText("N/A");
-//        humidityTv.setText("N/A");
-//        pmDataTv.setText("N/A");
-//        pmQualityTv.setText("N/A");
-//        weekTv.setText("N/A");
-//        temperatureTv.setText("N/A");
-//        climateTv.setText("N/A");
-//        windTv.setText("N/A");
+    void initPMFace(TodayWeather todayWeather){
+        if (Integer.parseInt(todayWeather.getPm25()) >= 0 && Integer.parseInt(todayWeather.getPm25()) <= 50){
+            pmImg.setImageLevel(0);
+        }else if (Integer.parseInt(todayWeather.getPm25()) > 50 && Integer.parseInt(todayWeather.getPm25()) <=100){
+            pmImg.setImageLevel(1);
+        }else if (Integer.parseInt(todayWeather.getPm25()) > 100 && Integer.parseInt(todayWeather.getPm25()) <=150){
+            pmImg.setImageLevel(2);
+        }else if (Integer.parseInt(todayWeather.getPm25()) > 150 && Integer.parseInt(todayWeather.getPm25()) <=200){
+            pmImg.setImageLevel(3);
+        }else if (Integer.parseInt(todayWeather.getPm25()) > 200 && Integer.parseInt(todayWeather.getPm25()) <=300){
+            pmImg.setImageLevel(4);
+        }else if (Integer.parseInt(todayWeather.getPm25()) > 300){
+            pmImg.setImageLevel(5);
+        }else{
+            pmImg.setImageLevel(0);
+        }
     }
 
     void updateTodayWeather(TodayWeather todayWeather) {
@@ -135,16 +197,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
         temperatureTv.setText(todayWeather.getHigh() +  "~" + todayWeather.getLow());
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力:" + todayWeather.getFengli());
+        /**
+         * 下行代码用于更新因天气变化而变化的图片，注意要在这里进行更换，因为更新ui界面只能在主界面完成
+         */
+        initWeatherImg(todayWeather);
+        /**
+         * 下行代码用于更新pm值不同人的体验的表情变化图，理由同上
+         */
+        initPMFace(todayWeather);
         Toast.makeText(MainActivity.this, "更新success!", Toast.LENGTH_SHORT).show();
     }
 
 
-    //通过SharedPreferences读取城市id，如果没有定义则缺省为101010100(北京城市 ID)。
+    //通过SharedPreferences读取城市id，如果没有定义则缺省为101010100(北京城市 ID)。兰州：101160101
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.title_update_btn) {
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
+            String cityCode = sharedPreferences.getString("main_city_code", "101010100");//默认是北京的编号
             Log.d("myWeather", cityCode);
 
             if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
