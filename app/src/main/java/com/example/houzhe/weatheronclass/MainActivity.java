@@ -1,7 +1,9 @@
 package com.example.houzhe.weatheronclass;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +41,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private static final int UPDATE_TODAY_WEATHER = 1;
 
     private ImageView mUpdateBtn;
+
+    private ImageView mCitySelect;
     private TextView cityTv, timeTv, weekTv, pmDataTv, pmQualityTv, temperatureTv,
             climateTv, windTv, city_name_Tv, humidityTv;
     private ImageView weatherImg, pmImg;
@@ -69,12 +73,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mUpdateBtn.setOnClickListener(this);
 
         if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
-            Log.d("myWeather", "网络可用");
-            Toast.makeText(MainActivity.this, "网络可用!", Toast.LENGTH_LONG).show();
+            Log.d("myWeather", "网络贼好");
+            Toast.makeText(MainActivity.this, "网络贼好!", Toast.LENGTH_LONG).show();
         } else {
-            Log.d("myWeather", "网络不可用");
-            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+            Log.d("myWeather", "网络完蛋");
+            Toast.makeText(MainActivity.this, "网络完蛋!", Toast.LENGTH_LONG).show();
         }
+        mCitySelect = (ImageView)findViewById(R.id.title_city_manager);
+        mCitySelect.setOnClickListener(this);
         initView();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -205,24 +211,44 @@ public class MainActivity extends Activity implements View.OnClickListener {
          * 下行代码用于更新pm值不同人的体验的表情变化图，理由同上
          */
         initPMFace(todayWeather);
-        Toast.makeText(MainActivity.this, "更新success!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, "update success!", Toast.LENGTH_SHORT).show();
     }
 
 
     //通过SharedPreferences读取城市id，如果没有定义则缺省为101010100(北京城市 ID)。兰州：101160101
     @Override
     public void onClick(View view) {
+        if (view.getId() == R.id.title_city_manager){
+            Intent i = new Intent(this, SelectCity.class);
+//            startActivity(i);
+            startActivityForResult(i, 1);
+        }
         if (view.getId() == R.id.title_update_btn) {
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
             String cityCode = sharedPreferences.getString("main_city_code", "101010100");//默认是北京的编号
             Log.d("myWeather", cityCode);
 
             if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
-                Log.d("myWeather", "网络可用");
+                Log.d("myWeather", "网络贼好");
                 queryWeatherCode(cityCode);
             } else {
-                Log.d("myWeather", "网络不可用");
-                Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+                Log.d("myWeather", "网络完蛋了");
+                Toast.makeText(MainActivity.this, "网络完蛋了!", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == 1 && resultCode == RESULT_OK){
+            String newCityCode = data.getStringExtra("cityCode");
+            Log.d("myWeather", "汝选择的城市代码乃"+newCityCode);
+
+            if(NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
+                Log.d("myWeather", "网络贼好");
+                queryWeatherCode(newCityCode);
+            }else{
+                Log.d("myWeather", "网络完蛋");
+                Toast.makeText(MainActivity.this, "网络完蛋了！", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -235,6 +261,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                //------------------------http请求数据--------------------------------
                 HttpURLConnection con = null;
                 TodayWeather todayWeather = null;
                 try {
@@ -245,6 +272,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     con.setReadTimeout(8000);
                     InputStream in = con.getInputStream();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    //------------------------http请求数据--------------------------------
                     StringBuilder response = new StringBuilder();
                     String str;
                     while ((str = reader.readLine()) != null) {

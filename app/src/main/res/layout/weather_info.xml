@@ -21,7 +21,7 @@
             android:layout_height="40dip"
             android:layout_marginTop="2.0dip"
             android:layout_toRightOf="@id/title_city_manager"
-            android:background="#A71717" />
+            android:background="#003d79" />
 
         <TextView
             android:id="@+id/title_city_name"
