@@ -69,7 +69,11 @@ public class TodayWeather {
     }
 
     public String getPm25() {
-        return pm25;
+        //需要在此处处理讨论pm25值是否存在
+        if(pm25 == null || pm25.isEmpty())
+            return "-1";
+        else
+            return pm25;
     }
 
     public void setPm25(String pm25) {

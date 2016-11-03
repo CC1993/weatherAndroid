@@ -1,6 +1,7 @@
 package com.example.houzhe.weatheronclass.app;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -17,7 +18,7 @@ import java.util.List;
 /**
  * Created by houzhe on 2016/11/1.
  */
-
+//用来取得在city.db文件里的城市信息的类
 public class MyApplication extends Application{
     private static final String TAG = "MyAPP";
 

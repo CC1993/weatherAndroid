@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <RelativeLayout
+        android:id="@+id/second_tittle"
         android:layout_width="fill_parent"
         android:layout_height="45.0dip"
         android:background="#2650cd">
@@ -31,5 +33,29 @@
             android:background="#003d79"
             android:gravity="center"/>
     </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/second_tittle"/>
+
+    <!--<LinearLayout-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="fill_parent"-->
+        <!--android:orientation="vertical"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/ItemTitle"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:textSize="20sp"/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/ItemText"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_below="@+id/ItemTitle"/>-->
+
+    <!--</LinearLayout>-->
 
 </RelativeLayout>

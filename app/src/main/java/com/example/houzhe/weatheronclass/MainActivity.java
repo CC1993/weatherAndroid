@@ -175,21 +175,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     void initPMFace(TodayWeather todayWeather){
-        if (Integer.parseInt(todayWeather.getPm25()) >= 0 && Integer.parseInt(todayWeather.getPm25()) <= 50){
-            pmImg.setImageLevel(0);
-        }else if (Integer.parseInt(todayWeather.getPm25()) > 50 && Integer.parseInt(todayWeather.getPm25()) <=100){
-            pmImg.setImageLevel(1);
-        }else if (Integer.parseInt(todayWeather.getPm25()) > 100 && Integer.parseInt(todayWeather.getPm25()) <=150){
-            pmImg.setImageLevel(2);
-        }else if (Integer.parseInt(todayWeather.getPm25()) > 150 && Integer.parseInt(todayWeather.getPm25()) <=200){
-            pmImg.setImageLevel(3);
-        }else if (Integer.parseInt(todayWeather.getPm25()) > 200 && Integer.parseInt(todayWeather.getPm25()) <=300){
-            pmImg.setImageLevel(4);
-        }else if (Integer.parseInt(todayWeather.getPm25()) > 300){
-            pmImg.setImageLevel(5);
+        //有可能在比较详细的地址区域内的PM值缺失而报错，当有这种情况，可以选择提示
+        //信息不足，此时需要加入新的突破，也可以选择区域所在省市的大情况或者就近选择。
+        //因为临近的地区代码差不多的。
+        if (todayWeather.getPm25() != null && !todayWeather.getPm25().isEmpty() ){
+            if (Integer.parseInt(todayWeather.getPm25()) >= 0 && Integer.parseInt(todayWeather.getPm25()) <= 50){
+                pmImg.setImageLevel(0);
+            }else if (Integer.parseInt(todayWeather.getPm25()) > 50 && Integer.parseInt(todayWeather.getPm25()) <=100){
+                pmImg.setImageLevel(1);
+            }else if (Integer.parseInt(todayWeather.getPm25()) > 100 && Integer.parseInt(todayWeather.getPm25()) <=150){
+                pmImg.setImageLevel(2);
+            }else if (Integer.parseInt(todayWeather.getPm25()) > 150 && Integer.parseInt(todayWeather.getPm25()) <=200){
+                pmImg.setImageLevel(3);
+            }else if (Integer.parseInt(todayWeather.getPm25()) > 200 && Integer.parseInt(todayWeather.getPm25()) <=300){
+                pmImg.setImageLevel(4);
+            }else if (Integer.parseInt(todayWeather.getPm25()) > 300){
+                pmImg.setImageLevel(5);
+            }else{
+                pmImg.setImageLevel(0);
+            }
         }else{
             pmImg.setImageLevel(0);
         }
+
     }
 
     void updateTodayWeather(TodayWeather todayWeather) {
@@ -225,7 +233,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         if (view.getId() == R.id.title_update_btn) {
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city_code", "101010100");//默认是北京的编号
+            String cityCode = sharedPreferences.getString("main_city_code", "101011100");//默认是北京的编号
             Log.d("myWeather", cityCode);
 
             if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
