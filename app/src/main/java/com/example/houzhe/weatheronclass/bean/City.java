@@ -12,6 +12,8 @@ public class City {
     private String allPY;
     private String allFirstPY;
 
+    private String wendu;
+
     public City(String province, String city, String number, String firstPY,
                 String allPY, String allFirstPY) {
         this.province = province;
@@ -20,6 +22,14 @@ public class City {
         this.firstPY = firstPY;
         this.allPY = allPY;
         this.allFirstPY = allFirstPY;
+    }
+
+    public String getWendu() {
+        return wendu;
+    }
+
+    public void setWendu(String wendu) {
+        this.wendu = wendu;
     }
 
     public String getProvince() {

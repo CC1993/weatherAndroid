@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private ImageView mCitySelect;
     private TextView cityTv, timeTv, weekTv, pmDataTv, pmQualityTv, temperatureTv,
-            climateTv, windTv, city_name_Tv, humidityTv;
+            climateTv, windTv, city_name_Tv, humidityTv, wendu;
     private ImageView weatherImg, pmImg;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -102,30 +102,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
         climateTv = (TextView) findViewById(R.id.climate);
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
+        wendu = (TextView) findViewById(R.id.wendu);
 
-//        SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-//        String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
-//        Log.d("myWeather", cityCode);
-//
-//        //初始化为一个城市
-//        if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
-//            Log.d("myWeather", "网络可用");
-//            queryWeatherCode(cityCode);
-//        } else {
-//            Log.d("myWeather", "网络不可用");
-//            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
-//        }
+        SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+        String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
+        Log.d("myWeather", cityCode);
 
-        city_name_Tv.setText("N/A");
-        cityTv.setText("N/A");
-        timeTv.setText("N/A");
-        humidityTv.setText("N/A");
-        pmDataTv.setText("N/A");
-        pmQualityTv.setText("N/A");
-        weekTv.setText("N/A");
-        temperatureTv.setText("N/A");
-        climateTv.setText("N/A");
-        windTv.setText("N/A");
+        //初始化为一个城市
+        if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
+            Log.d("myWeather", "网络可用");
+            queryWeatherCode(cityCode);
+        } else {
+            Log.d("myWeather", "网络不可用");
+            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+        }
+
+//        city_name_Tv.setText("N/A");
+//        cityTv.setText("N/A");
+//        timeTv.setText("N/A");
+//        humidityTv.setText("N/A");
+//        pmDataTv.setText("N/A");
+//        pmQualityTv.setText("N/A");
+//        weekTv.setText("N/A");
+//        temperatureTv.setText("N/A");
+//        climateTv.setText("N/A");
+//        windTv.setText("N/A");
     }
 
     void initWeatherImg(TodayWeather todayWeather){
@@ -178,7 +179,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //有可能在比较详细的地址区域内的PM值缺失而报错，当有这种情况，可以选择提示
         //信息不足，此时需要加入新的突破，也可以选择区域所在省市的大情况或者就近选择。
         //因为临近的地区代码差不多的。
-        if (todayWeather.getPm25() != null && !todayWeather.getPm25().isEmpty() ){
+        if (todayWeather.getPm25().equals("???")){
+            pmImg.setImageLevel(0);
+        }
+        else if (todayWeather.getPm25() != null && !todayWeather.getPm25().isEmpty() ){
             if (Integer.parseInt(todayWeather.getPm25()) >= 0 && Integer.parseInt(todayWeather.getPm25()) <= 50){
                 pmImg.setImageLevel(0);
             }else if (Integer.parseInt(todayWeather.getPm25()) > 50 && Integer.parseInt(todayWeather.getPm25()) <=100){
@@ -211,6 +215,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         temperatureTv.setText(todayWeather.getHigh() +  "~" + todayWeather.getLow());
         climateTv.setText(todayWeather.getType());
         windTv.setText("风力:" + todayWeather.getFengli());
+        wendu.setText(todayWeather.getWendu() + "℃");
         /**
          * 下行代码用于更新因天气变化而变化的图片，注意要在这里进行更换，因为更新ui界面只能在主界面完成
          */
@@ -254,6 +259,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if(NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
                 Log.d("myWeather", "网络贼好");
                 queryWeatherCode(newCityCode);
+                SharedPreferences settings
+                        = (SharedPreferences)getSharedPreferences("config", MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("main_city_code", newCityCode);
+                editor.commit();
+                Log.d("myWeather", "更新了默认天气地址：" + newCityCode);
             }else{
                 Log.d("myWeather", "网络完蛋");
                 Toast.makeText(MainActivity.this, "网络完蛋了！", Toast.LENGTH_LONG).show();
