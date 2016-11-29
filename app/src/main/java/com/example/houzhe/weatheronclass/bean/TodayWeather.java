@@ -115,6 +115,8 @@ public class TodayWeather {
     }
 
     public String getHigh() {
+        if(high == null || high.isEmpty())
+            return high;
         String highStr[] = high.split(" ");
         if(!highStr[1].isEmpty() && highStr[1] != null){
             return highStr[1];
@@ -127,6 +129,8 @@ public class TodayWeather {
     }
 
     public String getLow() {
+        if(low == null || low.isEmpty())
+            return low;
         String lowStr[] = low.split(" ");
         if(!lowStr[1].isEmpty() && lowStr[1] != null){
             return lowStr[1];

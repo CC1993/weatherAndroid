@@ -14,7 +14,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="当前城市：北京"
+            android:text="当前地区：北京"
             android:textColor="#ffffffff"
             android:textSize="20.0dip"/>
         <ImageView
@@ -34,10 +34,19 @@
             android:gravity="center"/>
     </RelativeLayout>
 
+    <SearchView
+        android:id="@+id/srv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="true"
+        android:inputType="textFilter"
+        android:layout_below="@+id/second_tittle"
+        android:queryHint="请输入您要查找的内容"/>
+
     <ListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/second_tittle"/>
+        android:layout_below="@+id/srv1"/>
 
 </RelativeLayout>

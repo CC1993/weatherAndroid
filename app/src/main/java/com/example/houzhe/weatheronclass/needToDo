@@ -1,3 +1,7 @@
-1. 搜索框，搜索城市
-2. 分享功能
-3. 主界面下面可以查看多天的天气，部分可滑动
+1.搜索框 Service
+2.点击刷新旋转功能 ui.pdf
+https://my.oschina.net/cuitongliang/blog/164399
+http://blog.csdn.net/garybook/article/details/7950799
+点击旋转功能首先会突然归正，而且没加processbar
+3.一周天气
+4.引导程序

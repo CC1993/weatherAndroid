@@ -8,8 +8,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,20 +37,34 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by houzhe on 16/9/21.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener {
 
     private static final int UPDATE_TODAY_WEATHER = 1;
+    private static final int UPDATE_SPIN_START = 2;
+    private static final int UPDATE_SPIN_STOP = 3;
+    private static final int INIT_NO_DATA = 4;
 
     private ImageView mUpdateBtn;
 
     private ImageView mCitySelect;
     private TextView cityTv, timeTv, weekTv, pmDataTv, pmQualityTv, temperatureTv,
-            climateTv, windTv, city_name_Tv, humidityTv, wendu;
+            climateTv, windTv, city_name_Tv, humidityTv, wendu, wenduTittle, pm25;
     private ImageView weatherImg, pmImg;
+
+    private Animation animation;
+
+    private ViewPagerAdapter viewPagerAdapter;
+    private ViewPager viewPager;
+    private List<View> views;
+
+    private ImageView[] dots;
+    private int[] ids = {R.id.iv1, R.id.iv2, R.id.iv3};
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -57,6 +76,32 @@ public class MainActivity extends Activity implements View.OnClickListener {
             switch (msg.what){
                 case UPDATE_TODAY_WEATHER:
                     updateTodayWeather((TodayWeather) msg.obj);
+                    break;
+                case UPDATE_SPIN_START:
+                    mUpdateBtn.startAnimation(animation);
+                    mUpdateBtn.setEnabled(false);
+                    break;
+                case UPDATE_SPIN_STOP:
+                    mUpdateBtn.clearAnimation();
+                    mUpdateBtn.setEnabled(true);
+                    break;
+                case INIT_NO_DATA:
+                    cityTv.setText("N/A");
+                    timeTv.setText("N/A");
+                    humidityTv.setText("N/A");
+                    pmDataTv.setText("N/A");
+                    pmQualityTv.setText("N/A");
+                    weekTv.setText("N/A");
+                    temperatureTv.setText("N/A");
+                    climateTv.setText("N/A");
+                    windTv.setText("N/A");
+                    wendu.setText("N/A");
+                    wenduTittle.setText("N/A");
+                    pm25.setText("N/A");
+                    SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
+                    String cityName = sharedPreferences.getString("main_city_name", "N/A");
+                    city_name_Tv.setText(cityName);
+                    Toast.makeText(MainActivity.this, "this city has no data, choose another one pls~", Toast.LENGTH_LONG).show();
                     break;
                 default:
                     break;
@@ -74,17 +119,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
             Log.d("myWeather", "网络贼好");
-            Toast.makeText(MainActivity.this, "网络贼好!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "network good!", Toast.LENGTH_LONG).show();
         } else {
             Log.d("myWeather", "网络完蛋");
-            Toast.makeText(MainActivity.this, "网络完蛋!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "network good!", Toast.LENGTH_LONG).show();
         }
         mCitySelect = (ImageView)findViewById(R.id.title_city_manager);
         mCitySelect.setOnClickListener(this);
         initView();
+
+        initViewPagers();
+        initDots();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public void startService(View view) {
+        startService(new Intent(getBaseContext(), MyService.class));
+    }
+
+    public void stopService(View view) {
+        stopService(new Intent(getBaseContext(), MyService.class));
     }
 
     //    初始化控件内容
@@ -103,6 +159,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         windTv = (TextView) findViewById(R.id.wind);
         weatherImg = (ImageView) findViewById(R.id.weather_img);
         wendu = (TextView) findViewById(R.id.wendu);
+        wenduTittle = (TextView) findViewById(R.id.wendutittle);
+        pm25 = (TextView) findViewById(R.id.pm2_5);
 
         SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         String cityCode = sharedPreferences.getString("main_city_code", "101160101");//默认是北京的编号
@@ -114,23 +172,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
             queryWeatherCode(cityCode);
         } else {
             Log.d("myWeather", "网络不可用");
-            Toast.makeText(MainActivity.this, "网络不可用!", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "network not available!", Toast.LENGTH_LONG).show();
         }
 
-//        city_name_Tv.setText("N/A");
-//        cityTv.setText("N/A");
-//        timeTv.setText("N/A");
-//        humidityTv.setText("N/A");
-//        pmDataTv.setText("N/A");
-//        pmQualityTv.setText("N/A");
-//        weekTv.setText("N/A");
-//        temperatureTv.setText("N/A");
-//        climateTv.setText("N/A");
-//        windTv.setText("N/A");
+    }
+
+    void initViewPagers() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        views = new ArrayList<View>();
+        views.add(inflater.inflate(R.layout.guide1, null));
+        views.add(inflater.inflate(R.layout.guide2, null));
+        views.add(inflater.inflate(R.layout.guide3, null));
+        viewPagerAdapter = new ViewPagerAdapter(views, this);
+        viewPager = (ViewPager) findViewById(R.id.week_broadcast);
+        viewPager.setAdapter(viewPagerAdapter);
+        viewPager.setOnPageChangeListener(this);
+    }
+
+    void initDots(){
+        dots = new ImageView[views.size()];
+        for (int i = 0;i < views.size();i++){
+            dots[i] = (ImageView)findViewById(ids[i]);
+        }
     }
 
     void initWeatherImg(TodayWeather todayWeather){
-        if(todayWeather.getType().equals("晴")){
+        if(null == todayWeather.getType() || todayWeather.getType().isEmpty())
+            weatherImg.setImageLevel(0);
+        else if(todayWeather.getType().equals("晴")){
             weatherImg.setImageLevel(0);
         }else if (todayWeather.getType().equals("暴雪")){
             weatherImg.setImageLevel(8);
@@ -160,7 +229,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             weatherImg.setImageLevel(13);
         }else if (todayWeather.getType().equals("阴")){
             weatherImg.setImageLevel(14);
-        }else if (todayWeather.getType().equals("雨加雪")){
+        }else if (todayWeather.getType().equals("雨夹雪")){
             weatherImg.setImageLevel(15);
         }else if (todayWeather.getType().equals("阵雪")){
             weatherImg.setImageLevel(16);
@@ -224,6 +293,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
          * 下行代码用于更新pm值不同人的体验的表情变化图，理由同上
          */
         initPMFace(todayWeather);
+        if(null == todayWeather.getCity() || todayWeather.getCity().isEmpty()){
+            Message msg = new Message();
+            msg.what = INIT_NO_DATA;
+            mHandler.sendMessage(msg);
+            Log.d("myWeather", "no data from API for that city");
+        }
         Toast.makeText(MainActivity.this, "update success!", Toast.LENGTH_SHORT).show();
     }
 
@@ -237,6 +312,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startActivityForResult(i, 1);
         }
         if (view.getId() == R.id.title_update_btn) {
+            //此处处理点击更新按钮后旋转按钮且不允许再次点击该按钮
+            animation = AnimationUtils.loadAnimation(this, R.anim.update_spin);
+            LinearInterpolator lin = new LinearInterpolator();
+            animation.setInterpolator(lin);
+            if(null != animation){
+                Message msg = new Message();
+                msg.what = UPDATE_SPIN_START;
+                mHandler.sendMessage(msg);
+                Log.d("myWeather", "clicked update, can`t click until finished");
+            }
+
+            //点击刷新后读取sharedpreferences获得之前保存的当前地址刷新天气信息，并且将默认地址设置为北京
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
             String cityCode = sharedPreferences.getString("main_city_code", "101011100");//默认是北京的编号
             Log.d("myWeather", cityCode);
@@ -246,7 +333,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 queryWeatherCode(cityCode);
             } else {
                 Log.d("myWeather", "网络完蛋了");
-                Toast.makeText(MainActivity.this, "网络完蛋了!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "network not available!", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -254,6 +341,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == 1 && resultCode == RESULT_OK){
             String newCityCode = data.getStringExtra("cityCode");
+            String newCityName = data.getStringExtra("cityName");
             Log.d("myWeather", "汝选择的城市代码乃"+newCityCode);
 
             if(NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
@@ -263,11 +351,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                         = (SharedPreferences)getSharedPreferences("config", MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString("main_city_code", newCityCode);
+                editor.putString("main_city_name", newCityName);
                 editor.commit();
                 Log.d("myWeather", "更新了默认天气地址：" + newCityCode);
+                Log.d("myWeather", "更新了默认天气地址：" + newCityName);
             }else{
                 Log.d("myWeather", "网络完蛋");
-                Toast.makeText(MainActivity.this, "网络完蛋了！", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "network not available！", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -300,9 +390,41 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     }
                     String responseStr = response.toString();
                     Log.d("myWeather", responseStr);
+                    /**
+                     * 报文例子
+                     *D/myWeather: <resp><city>北京</city><updatetime>20:05</updatetime><wendu>3</wendu><fengli>1级</fengli>
+                     * <shidu>68%</shidu><fengxiang>东北风</fengxiang><sunrise_1>07:15</sunrise_1><sunset_1>16:50</sunset_1><sunrise_2></sunrise_2>
+                     * <sunset_2></sunset_2><environment><aqi>147</aqi><pm25>112</pm25><suggest>儿童、老年人及心脏、呼吸系统疾病患者人群应减少长时间或高强度户外锻炼</suggest>
+                     * <quality>轻度污染</quality><MajorPollutants>颗粒物(PM2.5)</MajorPollutants><o3>2</o3><co>3</co><pm10>170</pm10><so2>24</so2><no2>86</no2>
+                     * <time>20:00:00</time></environment><alarm><cityKey>10101</cityKey><cityName><![CDATA[北京市]]></cityName>
+                     * <alarmType><![CDATA[霾]]></alarmType><alarmDegree><![CDATA[黄色]]></alarmDegree>
+                     * <alarmText><![CDATA[北京市气象台发布霾黄色预警]]></alarmText>
+                     * <alarm_details><![CDATA[北京市气象台29日17时00分发布霾黄色预警,预计，29日夜间至30日白天，本市大部分地区将出现轻度-中度霾，能见度较低，请注意防范。]]></alarm_details>
+                     * <standard><![CDATA[预计未来24小时内可能出现下列条件之一并将持续或实况已达到下列条件之一并可能持续：能见度小于3000米且相对湿度小于80%的霾；能见度小于3000米且相对湿度大于等于80%，PM2.5浓度大于115微克/立方米且小于等于150微克/立方米：能见度小于5000米，PM2.5浓度大于150微克/立方米且小于等于250微克/立方米。]]></standard>
+                     * <suggest><![CDATA[1、空气质量明显降低，人员需适当防护；2、一般人群适量减少户外活动，儿童、老人及易感人群应减少外出。]]></suggest>
+                     * <imgUrl><![CDATA[http://static.etouch.cn/apps/weather/alarm_icon-1/mai_yellow-1.png]]></imgUrl>
+                     * <time>2016-11-29 17:00:00</time></alarm>
+                     * <yesterday><date_1>28日星期一</date_1><high_1>高温 8℃</high_1><low_1>低温 -4℃</low_1><day_1><type_1>晴</type_1><fx_1>无持续风向</fx_1><fl_1>微风</fl_1></day_1><night_1><type_1>雾</type_1><fx_1>无持续风向</fx_1><fl_1>微风</fl_1></night_1></yesterday>
+                     * <forecast><weather><date>29日星期二</date><high>高温 4℃</high><low>低温 -3℃</low><day><type>雨夹雪</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>雨夹雪</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
+                     * <weather><date>30日星期三</date><high>高温 9℃</high><low>低温 -1℃</low><day><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
+                     * <weather><date>1日星期四</date><high>高温 8℃</high><low>低温 -4℃</low><day><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
+                     * <weather><date>2日星期五</date><high>高温 7℃</high><low>低温 -4℃</low><day><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
+                     * <weather><date>3日星期六</date><high>高温 7℃</high><low>低温 -2℃</low><day><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather></forecast>
+                     * <zhishu><zhishu><name>晨练指数</name><value>不宜</value><detail>有雾，空气质量差，且部分地面可能有积雪，路面湿滑，请避免户外晨练，建议在室内做锻炼。</detail></zhishu><zhishu><name>舒适度</name><value>较舒适</value><detail>白天天气阴沉，会感到有点儿凉，但大部分人完全可以接受。</detail></zhishu>
+                     * <zhishu><name>穿衣指数</name><value>较冷</value><detail>建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。</detai
+                     *
+                     */
+
 
                     todayWeather = parseXML(responseStr);
-                    if (todayWeather != null) {
+
+                    if(null == todayWeather.getCity() || todayWeather.getCity().isEmpty()){
+                        Message msg = new Message();
+                        msg.what = INIT_NO_DATA;
+                        mHandler.sendMessage(msg);
+                        Log.d("myWeather", "no data from API for that city");
+                    }
+                    if (todayWeather != null && null != todayWeather.getCity() && !todayWeather.getCity().isEmpty()) {
                         Log.d("myWeather", todayWeather.toString());
 
                         Message msg = new Message();
@@ -403,12 +525,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
                                 todayWeather.setType(xmlPullParser.getText());
                                 typeCount++;
                             }
+
                         }
                         break;
                     case XmlPullParser.END_TAG:
                         break;
                 }
                 eventType = xmlPullParser.next();
+            }
+
+            if (null != animation){
+                Message msg = new Message();
+                msg.what = UPDATE_SPIN_STOP;
+                mHandler.sendMessage(msg);
+                Log.d("myWeather", "updating finished, can click again now");
             }
         } catch (XmlPullParserException e) {
             e.printStackTrace();
@@ -452,6 +582,27 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        for(int a = 0;a<ids.length;a++){
+            if(a == position){
+                dots[a].setImageResource(R.drawable.page_indicator_focused);
+            }else{
+                dots[a].setImageResource(R.drawable.page_indicator_unfocused);
+            }
+        }
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }
 
