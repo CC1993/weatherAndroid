@@ -32,7 +32,7 @@ public class GuidePages extends Activity implements ViewPager.OnPageChangeListen
     protected void onCreate(Bundle savedInstanceState){
         SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
         String fistTime = sharedPreferences.getString("check_fist_using", "0");
-        if (fistTime.equals("0")){
+        if (fistTime.equals("0")){//此处判断应为0
             super.onCreate(savedInstanceState);
             setContentView(R.layout.guide_pages);
             initViews();

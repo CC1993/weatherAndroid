@@ -71,7 +71,7 @@ public class TodayWeather {
     public String getPm25() {
         //需要在此处处理讨论pm25值是否存在
         if(pm25 == null || pm25.isEmpty())
-            return "???";
+            return "~~";
         else
             return pm25;
     }
@@ -82,7 +82,7 @@ public class TodayWeather {
 
     public String getQuality() {
         if(quality == null || quality.isEmpty())
-            return "数据缺失";
+            return "缺少数据";
         return quality;
     }
 

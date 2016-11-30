@@ -1,6 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5.0dip" >
+
+        <!-- 今日星期 -->
+        <TextView
+            android:id="@+id/week_today1_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:text="日期 N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        <!-- 天气情况图片示例 -->
+        <ImageView
+            android:id="@+id/weather1_img_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/week_today1_guide1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/weather" />
+        <!-- 温度范围 -->
+        <TextView
+            android:id="@+id/temperature1_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/weather1_img_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="30.0sp" />
+        <!-- 天气状况 -->
+        <TextView
+            android:id="@+id/climate1_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/temperature1_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+        <!-- 风力信息 -->
+        <TextView
+            android:id="@+id/wind1_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/climate1_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5.0dip" >
+
+        <!-- 今日星期 -->
+        <TextView
+            android:id="@+id/week_today2_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:text="日期 N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/weather2_img_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/week_today2_guide1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/weather" />
+        <!-- 温度范围 -->
+        <TextView
+            android:id="@+id/temperature2_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/weather2_img_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="30.0sp" />
+        <!-- 天气状况 -->
+        <TextView
+            android:id="@+id/climate2_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/temperature2_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+        <!-- 风力信息 -->
+        <TextView
+            android:id="@+id/wind2_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/climate2_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5.0dip" >
+
+        <!-- 今日星期 -->
+        <TextView
+            android:id="@+id/week_today3_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:singleLine="true"
+            android:text="日期 N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+        <ImageView
+            android:id="@+id/weather3_img_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/week_today3_guide1"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/weather" />
+        <!-- 温度范围 -->
+        <TextView
+            android:id="@+id/temperature3_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/weather3_img_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="30.0sp" />
+        <!-- 天气状况 -->
+        <TextView
+            android:id="@+id/climate3_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/temperature3_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+        <!-- 风力信息 -->
+        <TextView
+            android:id="@+id/wind3_guide1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/climate3_guide1"
+            android:singleLine="true"
+            android:text="N/A"
+            android:textColor="@android:color/white"
+            android:textSize="20.0sp" />
+
+    </RelativeLayout>
 
 </LinearLayout>

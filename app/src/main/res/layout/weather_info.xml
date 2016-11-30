@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 代表bar栏 -->
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="fill_parent"
@@ -123,9 +124,39 @@
                 android:textColor="@android:color/white"
                 android:textSize="15.0sp" />
 
+            <!-- 现在温度信息块 -->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true" >
+
+                <!-- 当前温度 -->
+                <TextView
+                    android:id="@+id/wendutittle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:layout_marginTop="1dip"
+                    android:singleLine="true"
+                    android:text="当前温度"
+                    android:textColor="@android:color/white"
+                    android:textSize="15.0sp" />
+                <!-- 当前温度 -->
+                <TextView
+                    android:id="@+id/wendu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/wendutittle"
+                    android:layout_centerHorizontal="true"
+                    android:singleLine="true"
+                    android:text="N/A"
+                    android:textColor="@android:color/white"
+                    android:textSize="60.0sp" />
+            </RelativeLayout>
 
             <!-- PM2.5整体信息块 -->
-
             <LinearLayout
                 android:id="@+id/pm2_5_content"
                 android:layout_width="wrap_content"
@@ -190,12 +221,14 @@
             </LinearLayout>
             <!-- 今日天气信息块 -->
             <RelativeLayout
+                android:id="@+id/today_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
                 android:layout_below="@id/humidity"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="5.0dip" >
+                android:layout_marginTop="5.0dip"
+                android:paddingTop="15dp">
 
                 <!-- 天气情况图片示例 -->
                 <ImageView
@@ -258,37 +291,20 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/pm2_5_content"
+                android:layout_below="@id/today_info"
+                android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="10.0dip" >
-
-                <!-- 当前温度 -->
+                android:layout_marginTop="5.0dip"
+                android:paddingTop="15dp">
                 <TextView
-                    android:id="@+id/wendu"
+                    android:id="@+id/detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginLeft="15.0dip"
-                    android:singleLine="true"
+                    android:layout_marginLeft="5dip"
                     android:text="N/A"
                     android:textColor="@android:color/white"
-                    android:textSize="60.0sp" />
-                <!-- 当前温度 -->
-                <TextView
-                    android:id="@+id/wendutittle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_below="@id/wendu"
-                    android:gravity="center"
-                    android:layout_marginLeft="15.0dip"
-                    android:layout_marginTop="1dip"
-                    android:singleLine="true"
-                    android:text="当前温度"
-                    android:textColor="@android:color/white"
-                    android:textSize="15.0sp" />
+                    android:textSize="20sp" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -305,12 +321,11 @@
 
             <android.support.v4.view.ViewPager
                 android:layout_width="fill_parent"
-                android:layout_height="200dp"
+                android:layout_height="280dp"
                 android:id="@+id/week_broadcast"
-                android:background="@android:color/darker_gray"
                 android:layout_alignParentBottom="true"
                 ></android.support.v4.view.ViewPager>
-
+            <!-- 滑动部下方的两个个点 -->
             <LinearLayout
                 android:id="@+id/indicator"
                 android:layout_width="fill_parent"
@@ -327,12 +342,6 @@
                     android:src="@drawable/page_indicator_focused"/>
                 <ImageView
                     android:id="@+id/iv2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:src="@drawable/page_indicator_unfocused"/>
-                <ImageView
-                    android:id="@+id/iv3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
