@@ -8,7 +8,7 @@
         android:id="@+id/second_tittle"
         android:layout_width="fill_parent"
         android:layout_height="45.0dip"
-        android:background="#2650cd">
+        android:background="#1945ca">
         <TextView
             android:id="@+id/title_name"
             android:layout_width="fill_parent"

@@ -39,7 +39,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="30.0sp" />
+            android:textSize="20.0sp" />
         <!-- 天气状况 -->
         <TextView
             android:id="@+id/climate1_guide1"
@@ -50,7 +50,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
         <!-- 风力信息 -->
         <TextView
             android:id="@+id/wind1_guide1"
@@ -61,7 +61,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
 
     </RelativeLayout>
 
@@ -100,7 +100,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="30.0sp" />
+            android:textSize="20.0sp" />
         <!-- 天气状况 -->
         <TextView
             android:id="@+id/climate2_guide1"
@@ -111,7 +111,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
         <!-- 风力信息 -->
         <TextView
             android:id="@+id/wind2_guide1"
@@ -122,7 +122,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
 
     </RelativeLayout>
 
@@ -161,7 +161,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="30.0sp" />
+            android:textSize="20.0sp" />
         <!-- 天气状况 -->
         <TextView
             android:id="@+id/climate3_guide1"
@@ -172,7 +172,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
         <!-- 风力信息 -->
         <TextView
             android:id="@+id/wind3_guide1"
@@ -183,7 +183,7 @@
             android:singleLine="true"
             android:text="N/A"
             android:textColor="@android:color/white"
-            android:textSize="20.0sp" />
+            android:textSize="18.0sp" />
 
     </RelativeLayout>
 

@@ -77,10 +77,12 @@ public class SelectCity extends Activity implements View.OnClickListener, Search
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapeterView, View view, int i, long l){
-                Toast.makeText(SelectCity.this, "changing to："+listItem.get(i).get("name"), Toast.LENGTH_SHORT).show();
+                ListView listView = (ListView) adapeterView;
+                Map<String, Object> map = (HashMap<String, Object>) listView.getItemAtPosition(i);
+                Toast.makeText(SelectCity.this, "changing to："+map.get("name"), Toast.LENGTH_SHORT).show();
                 Intent intent= new Intent();
-                intent.putExtra("cityCode", (String) listItem.get(i).get("code"));
-                intent.putExtra("cityName", (String) listItem.get(i).get("name"));
+                intent.putExtra("cityCode", (String) map.get("code"));
+                intent.putExtra("cityName", (String) map.get("name"));
                 setResult(RESULT_OK, intent);
                 finish();
             }

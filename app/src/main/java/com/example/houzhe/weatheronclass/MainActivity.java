@@ -108,8 +108,8 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     climateTv.setText("N/A");
                     windTv.setText("N/A");
                     wendu.setText("N/A");
-                    wenduTittle.setText("N/A");
-                    pm25.setText("N/A");
+                    wenduTittle.setText("当前温度");
+                    pm25.setText("PM2.5");
                     detailTv.setText("N/A");
                     SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
                     String cityName = sharedPreferences.getString("main_city_name", "N/A");
@@ -241,47 +241,49 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     void initWeatherImg(TodayWeather todayWeather, ImageView imageView){
-        if(null == todayWeather.getType() || todayWeather.getType().isEmpty())
+        String[] types = todayWeather.getType().split("转");
+        String type = types[0];
+        if(null == type || type.isEmpty())
             imageView.setImageLevel(0);
-        else if(todayWeather.getType().equals("晴")){
+        else if(type.equals("晴")){
             imageView.setImageLevel(0);
-        }else if (todayWeather.getType().equals("暴雪")){
+        }else if (type.equals("暴雪")){
             imageView.setImageLevel(8);
-        }else if (todayWeather.getType().equals("暴雨")){
+        }else if (type.equals("暴雨")){
             imageView.setImageLevel(1);
-        }else if (todayWeather.getType().equals("大暴雨")){
+        }else if (type.equals("大暴雨")){
             imageView.setImageLevel(2);
-        }else if (todayWeather.getType().equals("大雪")){
+        }else if (type.equals("大雪")){
             imageView.setImageLevel(3);
-        }else if (todayWeather.getType().equals("大雨")){
+        }else if (type.equals("大雨")){
             imageView.setImageLevel(4);
-        }else if (todayWeather.getType().equals("多云")){
+        }else if (type.equals("多云")){
             imageView.setImageLevel(5);
-        }else if (todayWeather.getType().equals("雷阵雨")){
+        }else if (type.equals("雷阵雨")){
             imageView.setImageLevel(6);
-        }else if (todayWeather.getType().equals("雷阵雨冰雹")){
+        }else if (type.equals("雷阵雨冰雹")){
             imageView.setImageLevel(7);
-        }else if (todayWeather.getType().equals("沙尘暴")){
+        }else if (type.equals("沙尘暴")){
             imageView.setImageLevel(9);
-        }else if (todayWeather.getType().equals("特大暴雨")){
+        }else if (type.equals("特大暴雨")){
             imageView.setImageLevel(10);
-        }else if (todayWeather.getType().equals("雾")){
+        }else if (type.equals("雾")){
             imageView.setImageLevel(11);
-        }else if (todayWeather.getType().equals("小雪")){
+        }else if (type.equals("小雪")){
             imageView.setImageLevel(12);
-        }else if (todayWeather.getType().equals("小雨")){
+        }else if (type.equals("小雨")){
             imageView.setImageLevel(13);
-        }else if (todayWeather.getType().equals("阴")){
+        }else if (type.equals("阴")){
             imageView.setImageLevel(14);
-        }else if (todayWeather.getType().equals("雨夹雪")){
+        }else if (type.equals("雨夹雪")){
             imageView.setImageLevel(15);
-        }else if (todayWeather.getType().equals("阵雪")){
+        }else if (type.equals("阵雪")){
             imageView.setImageLevel(16);
-        }else if (todayWeather.getType().equals("阵雨")){
+        }else if (type.equals("阵雨")){
             imageView.setImageLevel(17);
-        }else if (todayWeather.getType().equals("中雪")){
+        }else if (type.equals("中雪")){
             imageView.setImageLevel(18);
-        }else if (todayWeather.getType().equals("中雨")){
+        }else if (type.equals("中雨")){
             imageView.setImageLevel(19);
         }else{
             imageView.setImageLevel(0);
@@ -335,7 +337,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
         fifthWeather = weathers.get("fifthWeather");
         detail = weathers.get("detail");
 
-        city_name_Tv.setText(todayWeather.getCity());
+        city_name_Tv.setText(todayWeather.getCity() + "天气");
         cityTv.setText(todayWeather.getCity());
         timeTv.setText(todayWeather.getUpdatetime() + "发布");
         humidityTv.setText("湿度:" + todayWeather.getShidu());
@@ -1014,8 +1016,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                 eventType = xmlPullParser.next();
             }
             firstWeather = todayWeather;
-            String[] date = firstWeather.getDate().split("日");
-            firstWeather.setDate(date[1]);
+            if(firstWeather.getDate() != null && !firstWeather.getDate().isEmpty()){
+                String[] date = firstWeather.getDate().split("日");
+                firstWeather.setDate(date[1]);
+            }
             //自此获得了最近6天的天气信息
 
             if (null != animation){

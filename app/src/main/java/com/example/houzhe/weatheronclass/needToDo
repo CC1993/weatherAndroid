@@ -1,9 +1,10 @@
-1.搜索框 Service
-2.点击刷新旋转功能 ui.pdf
+1.//点击刷新旋转功能 ui.pdf
 https://my.oschina.net/cuitongliang/blog/164399
 http://blog.csdn.net/garybook/article/details/7950799
 点击旋转功能首先会突然归正，而且没加processbar
 
-3.一周天气
-4.引导页面的设计
-5.加一个内容在中间位置
+2.引导页面的设计
+
+3.百度定位、云测试、自动更新、访问统计、 在线反馈
+
+4.发布到公网，生成下载地址的二维码
