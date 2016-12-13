@@ -67,7 +67,7 @@ public class SelectCity extends Activity implements View.OnClickListener, Search
         listView = (ListView)findViewById(R.id.lv);
         //允许列表被过滤
         listView.setTextFilterEnabled(true);
-//        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cityNames));
+        //listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cityNames));
 
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, listItem,
                 R.layout.items, new String[]{"name", "desc"},
@@ -92,9 +92,6 @@ public class SelectCity extends Activity implements View.OnClickListener, Search
     private void addCityNames(){
         MyApplication myApplication = (MyApplication) this.getApplication();
         List<City> list = myApplication.getCityList();
-//        for (City city : list){
-//            cityNames.add(city.getCity());
-//        }
         for (int i = 0;i < list.size();i++){
             Map<String, Object> item = new HashMap<String, Object>();
             item.put("name", list.get(i).getCity());
@@ -115,8 +112,6 @@ public class SelectCity extends Activity implements View.OnClickListener, Search
         switch (v.getId()){
             case R.id.title_back:
                 Intent i = new Intent();
-//                i.putExtra("cityCode", "101160101");
-//                setResult(RESULT_OK, i);
                 finish();
                 break;
             default:

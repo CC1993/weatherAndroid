@@ -3,7 +3,6 @@ package com.example.houzhe.weatheronclass;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +25,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.w3c.dom.Text;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -69,6 +67,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     private ImageView[] dots;
     private int[] ids = {R.id.iv1, R.id.iv2};
 
+    //滑动部分展示未来几天天气的控件
     private TextView weekToday1Guide1, weekToday2Guide1, weekToday3Guide1, weekToday1Guide2,
             weekToday2Guide2, weekToday3Guide2, temperature1Guide1,temperature2Guide1,
             temperature3Guide1, temperature1Guide2, temperature2Guide2, temperature3Guide2,
@@ -291,9 +290,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     }
 
     void initPMFace(TodayWeather todayWeather, ImageView pmImg){
-        //有可能在比较详细的地址区域内的PM值缺失而报错，当有这种情况，可以选择提示
-        //信息不足，此时需要加入新的突破，也可以选择区域所在省市的大情况或者就近选择。
-        //因为临近的地区代码差不多的。
+        //当有的城市出现没有pm2.5数值的情况时显示数据不足。
         if (todayWeather.getPm25().equals("~~")){
             pmImg.setImageLevel(0);
         }
@@ -485,31 +482,6 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     }
                     String responseStr = response.toString();
                     Log.d("myWeather", responseStr);
-                    /**
-                     * 报文例子
-                     *D/myWeather: <resp><city>北京</city><updatetime>20:05</updatetime><wendu>3</wendu><fengli>1级</fengli>
-                     * <shidu>68%</shidu><fengxiang>东北风</fengxiang><sunrise_1>07:15</sunrise_1><sunset_1>16:50</sunset_1><sunrise_2></sunrise_2>
-                     * <sunset_2></sunset_2><environment><aqi>147</aqi><pm25>112</pm25><suggest>儿童、老年人及心脏、呼吸系统疾病患者人群应减少长时间或高强度户外锻炼</suggest>
-                     * <quality>轻度污染</quality><MajorPollutants>颗粒物(PM2.5)</MajorPollutants><o3>2</o3><co>3</co><pm10>170</pm10><so2>24</so2><no2>86</no2>
-                     * <time>20:00:00</time></environment><alarm><cityKey>10101</cityKey><cityName><![CDATA[北京市]]></cityName>
-                     * <alarmType><![CDATA[霾]]></alarmType><alarmDegree><![CDATA[黄色]]></alarmDegree>
-                     * <alarmText><![CDATA[北京市气象台发布霾黄色预警]]></alarmText>
-                     * <alarm_details><![CDATA[北京市气象台29日17时00分发布霾黄色预警,预计，29日夜间至30日白天，本市大部分地区将出现轻度-中度霾，能见度较低，请注意防范。]]></alarm_details>
-                     * <standard><![CDATA[预计未来24小时内可能出现下列条件之一并将持续或实况已达到下列条件之一并可能持续：能见度小于3000米且相对湿度小于80%的霾；能见度小于3000米且相对湿度大于等于80%，PM2.5浓度大于115微克/立方米且小于等于150微克/立方米：能见度小于5000米，PM2.5浓度大于150微克/立方米且小于等于250微克/立方米。]]></standard>
-                     * <suggest><![CDATA[1、空气质量明显降低，人员需适当防护；2、一般人群适量减少户外活动，儿童、老人及易感人群应减少外出。]]></suggest>
-                     * <imgUrl><![CDATA[http://static.etouch.cn/apps/weather/alarm_icon-1/mai_yellow-1.png]]></imgUrl>
-                     * <time>2016-11-29 17:00:00</time></alarm>
-                     * <yesterday><date_1>28日星期一</date_1><high_1>高温 8℃</high_1><low_1>低温 -4℃</low_1><day_1><type_1>晴</type_1><fx_1>无持续风向</fx_1><fl_1>微风</fl_1></day_1><night_1><type_1>雾</type_1><fx_1>无持续风向</fx_1><fl_1>微风</fl_1></night_1></yesterday>
-                     * <forecast><weather><date>29日星期二</date><high>高温 4℃</high><low>低温 -3℃</low><day><type>雨夹雪</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>雨夹雪</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
-                     * <weather><date>30日星期三</date><high>高温 9℃</high><low>低温 -1℃</low><day><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
-                     * <weather><date>1日星期四</date><high>高温 8℃</high><low>低温 -4℃</low><day><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
-                     * <weather><date>2日星期五</date><high>高温 7℃</high><low>低温 -4℃</low><day><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>晴</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather>
-                     * <weather><date>3日星期六</date><high>高温 7℃</high><low>低温 -2℃</low><day><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></day><night><type>雾</type><fengxiang>无持续风向</fengxiang><fengli>微风级</fengli></night></weather></forecast>
-                     * <zhishu><zhishu><name>晨练指数</name><value>不宜</value><detail>有雾，空气质量差，且部分地面可能有积雪，路面湿滑，请避免户外晨练，建议在室内做锻炼。</detail></zhishu><zhishu><name>舒适度</name><value>较舒适</value><detail>白天天气阴沉，会感到有点儿凉，但大部分人完全可以接受。</detail></zhishu>
-                     * <zhishu><name>穿衣指数</name><value>较冷</value><detail>建议着厚外套加毛衣等服装。年老体弱者宜着大衣、呢外套加羊毛衫。</detai
-                     *
-                     */
-
 
                     Map<String, TodayWeather> weathers = new HashMap<String, TodayWeather>();
                     weathers = parseXML(responseStr);
