@@ -59,6 +59,7 @@
 
     </RelativeLayout>
 
+    <!-- 下方天气说明部分 -->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -80,7 +81,7 @@
 
 
         <!-- 今日天气信息 -->
-        <RelativeLayout
+w        <RelativeLayout
             android:id="@+id/weather_today"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -308,10 +309,6 @@
             </RelativeLayout>
 
         </RelativeLayout>
-
-        <!-- 六日天气信息 -->
-
-        <!-- 广告等信息 -->
 
         <!-- 最近6天天气 -->
         <RelativeLayout
