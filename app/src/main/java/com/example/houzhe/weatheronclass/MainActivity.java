@@ -130,13 +130,16 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     if (success != 0){
                         Toast.makeText(MainActivity.this, "无法定位您现在的位置，出错了，请手动选择", Toast.LENGTH_LONG).show();
                     }
+                    mLocationClient.stopLocation();
                 }else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
                     Log.e("AmapError","location Error, ErrCode:"
                             + amapLocation.getErrorCode() + ", errInfo:"
                             + amapLocation.getErrorInfo());
                     String[] errorInfo = amapLocation.getErrorInfo().split(" ");
-                    Toast.makeText(MainActivity.this, errorInfo[0], Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "定位失败：" + errorInfo[0], Toast.LENGTH_LONG).show();
+//                    Toast.makeText(MainActivity.this, "定位您的地址成功：北京--正在更新...", Toast.LENGTH_LONG).show();
+                    mLocationClient.stopLocation();
                 }
             }
         }
