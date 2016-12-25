@@ -99,12 +99,14 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     //可在其中解析amapLocation获取相应内容。
                     Log.d("mWeather", "获取地址信息成功");
                     Log.d("mWeather", "获取地址为："+amapLocation.getCity());
+                    String[] citys = amapLocation.getCity().split("市");
+                    String city = citys[0];
                     MyApplication myApplication = (MyApplication) MainActivity.this.getApplication();
                     List<City> list = myApplication.getCityList();
 
                     int success = 0;
                     for (City c : list){
-                        if (c.getCity().equals(amapLocation.getCity())){
+                        if (c.getCity().equals(city)){
                             if (NetUtil.getNetworkState(MainActivity.this) != NetUtil.NETWORN_NONE) {
                                 success = 1;
                                 Log.d("myWeather", "网络贼好");
@@ -119,7 +121,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 Log.d("myWeather", "更新了默认天气地址：" + cityCode);
                                 Log.d("myWeather", "更新了默认天气地址：" + cityCode);
                                 queryWeatherCode(cityCode);
-                                Toast.makeText(MainActivity.this, "定位您的地址成功："+c.getCity()+"--正在更新...", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "定位您的地址成功："+c.getCity(), Toast.LENGTH_LONG).show();
                             } else {
                                 Log.d("myWeather", "网络完蛋了");
                                 Toast.makeText(MainActivity.this, "network not available!", Toast.LENGTH_LONG).show();
@@ -127,7 +129,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                             break;
                         }
                     }
-                    if (success != 0){
+                    if (success == 0){
                         Toast.makeText(MainActivity.this, "无法定位您现在的位置，出错了，请手动选择", Toast.LENGTH_LONG).show();
                     }
                     mLocationClient.stopLocation();
@@ -140,6 +142,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     Toast.makeText(MainActivity.this, "定位失败：" + errorInfo[0], Toast.LENGTH_LONG).show();
 //                    Toast.makeText(MainActivity.this, "定位您的地址成功：北京--正在更新...", Toast.LENGTH_LONG).show();
                     mLocationClient.stopLocation();
+                    mLocationClient.onDestroy();
                 }
             }
         }
@@ -537,6 +540,27 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             Log.d("myWeather", "汝选择的城市代码乃"+newCityCode);
 
             if(NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE){
+
+                //------借助高德地图api进行定位的初始化设置
+                //初始化定位
+                mLocationClient = new AMapLocationClient(getApplicationContext());
+                //设置定位回调监听
+                mLocationClient.setLocationListener(mLocationListener);
+
+                mLocationOption = new AMapLocationClientOption();
+                //设置定位模式为AMapLocationMode.Hight_Accuracy，高精度模式。
+                mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
+                //设置是否返回地址信息（默认返回地址信息）
+                mLocationOption.setNeedAddress(true);
+                //设置是否强制刷新WIFI，默认为true，强制刷新。
+                mLocationOption.setWifiActiveScan(false);
+                //设置是否允许模拟位置,默认为false，不允许模拟位置
+                mLocationOption.setMockEnable(false);
+                //单位是毫秒，默认30000毫秒，建议超时时间不要低于8000毫秒。
+                mLocationOption.setHttpTimeOut(20000);
+                //关闭缓存机制
+                mLocationOption.setLocationCacheEnable(false);
+
                 Log.d("myWeather", "网络贼好");
                 queryWeatherCode(newCityCode);
                 SharedPreferences settings

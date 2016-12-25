@@ -27,4 +27,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.0'
     compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile files('libs/AMap_Location_V3.2.0_20161205.jar')
+    compile files('libs/umeng-analytics-v6.0.7.jar')
+    compile files('libs/utdid4all-1.0.4.jar')
 }
