@@ -119,7 +119,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                     //可在其中解析amapLocation获取相应内容。
                     Log.d("mWeather", "获取地址信息成功");
                     Log.d("mWeather", "获取地址为："+amapLocation.getCity());
-                    String[] citys = amapLocation.getCity().split("市");
+                    String[] citys = amapLocation.getDistrict().split("区");
                     String city = citys[0];
                     MyApplication myApplication = (MyApplication) MainActivity.this.getApplication();
                     List<City> list = myApplication.getCityList();

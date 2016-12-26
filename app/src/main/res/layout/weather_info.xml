@@ -81,7 +81,7 @@
 
 
         <!-- 今日天气信息 -->
-w        <RelativeLayout
+        <RelativeLayout
             android:id="@+id/weather_today"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -229,7 +229,7 @@ w        <RelativeLayout
                 android:layout_below="@id/humidity"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="5.0dip"
-                android:paddingTop="15dp">
+                android:paddingTop="5dp">
 
                 <!-- 天气情况图片示例 -->
                 <ImageView
@@ -296,7 +296,7 @@ w        <RelativeLayout
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="5.0dip"
-                android:paddingTop="8dp">
+                android:paddingTop="5dp">
                 <TextView
                     android:id="@+id/detail"
                     android:layout_width="wrap_content"
@@ -305,7 +305,7 @@ w        <RelativeLayout
                     android:layout_marginLeft="5dip"
                     android:text="N/A"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
             </RelativeLayout>
 
         </RelativeLayout>
