@@ -1,12 +1,16 @@
 package com.example.houzhe.weatheronclass;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -50,14 +54,14 @@ import java.util.Map;
 /**
  * Created by houzhe on 16/9/21.
  */
-public class MainActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends Activity implements View.OnClickListener, ViewPager.OnPageChangeListener{
 
     private static final int UPDATE_TODAY_WEATHER = 1;
     private static final int UPDATE_SPIN_START = 2;
     private static final int UPDATE_SPIN_STOP = 3;
     private static final int INIT_NO_DATA = 4;
 
-    private ImageView mUpdateBtn,tittleLocation;
+    private ImageView mUpdateBtn,tittleLocation, tittleShare;
 
     private ImageView mCitySelect;
     private TextView cityTv, timeTv, weekTv, pmDataTv, pmQualityTv, temperatureTv,
@@ -82,6 +86,22 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             wind3Guide2;
     private ImageView weather1ImgGuide1, weather2ImgGuide1, weather3ImgGuide1, weather1ImgGuide2,
             weather2ImgGuide2, weather3ImgGuide2;
+
+    /**
+     * 需要进行检测的权限数组
+     */
+    protected String[] needPermissions = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.READ_PHONE_STATE
+    };
+    private static final int PERMISSON_REQUESTCODE = 0;
+    /**
+     * 判断是否需要检测，防止不停的弹框
+     */
+    private boolean isNeedCheck = true;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -193,6 +213,13 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //这里以ACCESS_COARSE_LOCATION为例
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            //申请WRITE_EXTERNAL_STORAGE权限
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);//自定义的code
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.weather_info);//加载布局
 
@@ -201,6 +228,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
         tittleLocation = (ImageView) findViewById(R.id.title_location);
         tittleLocation.setOnClickListener(this);
+
+        tittleShare = (ImageView) findViewById(R.id.title_share);
+        tittleShare.setOnClickListener(this);
 
         if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
             Log.d("myWeather", "网络贼好");
@@ -510,7 +540,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
 
             //点击刷新后读取sharedpreferences获得之前保存的当前地址刷新天气信息，并且将默认地址设置为北京
             SharedPreferences sharedPreferences = getSharedPreferences("config", MODE_PRIVATE);
-            String cityCode = sharedPreferences.getString("main_city_code", "101011100");//默认是北京的编号
+            String cityCode = sharedPreferences.getString("main_city_code", "101010100");//默认是北京的编号
             Log.d("myWeather", cityCode);
 
             if (NetUtil.getNetworkState(this) != NetUtil.NETWORN_NONE) {
@@ -530,6 +560,10 @@ public class MainActivity extends Activity implements View.OnClickListener, View
             mLocationClient.startLocation();
             Toast.makeText(MainActivity.this, "正在定位...", Toast.LENGTH_LONG).show();
 
+        }
+
+        if (view.getId() == R.id.title_share){
+            Toast.makeText(MainActivity.this, "分享功能将在2.0版本加入，敬请期待~", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -763,6 +797,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 eventType = xmlPullParser.next();
                                 Log.d("myWeather", "yesterdayWeather date_1:    " + xmlPullParser.getText());
                                 String date[] = xmlPullParser.getText().split("日");
+                                if(date[1].length() == 2){
+                                    date[1] = date[1] + "日";
+                                }
                                 yesterdayWeather.setDate(date[1]);
                                 break;
                             } else if (xmlPullParser.getName().equals("fx_1") && fxCountBro == 0) {
@@ -873,6 +910,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 eventType = xmlPullParser.next();
                                 Log.d("myWeather", "secondWeather date:    " + xmlPullParser.getText());
                                 String date[] = xmlPullParser.getText().split("日");
+                                if(date[1].length() == 2){
+                                    date[1] = date[1] + "日";
+                                }
                                 secondWeather.setDate(date[1]);
                                 dateCount++;
                                 break;
@@ -937,6 +977,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 eventType = xmlPullParser.next();
                                 Log.d("myWeather", "thirdWeather date:    " + xmlPullParser.getText());
                                 String date[] = xmlPullParser.getText().split("日");
+                                if(date[1].length() == 2){
+                                    date[1] = date[1] + "日";
+                                }
                                 thirdWeather.setDate(date[1]);
                                 dateCount++;
                                 break;
@@ -1001,6 +1044,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                                 eventType = xmlPullParser.next();
                                 Log.d("myWeather", "fourthWeather date:    " + xmlPullParser.getText());
                                 String date[] = xmlPullParser.getText().split("日");
+                                if(date[1].length() == 2){
+                                    date[1] = date[1] + "日";
+                                }
                                 fourthWeather.setDate(date[1]);
                                 dateCount++;
                                 break;
@@ -1065,6 +1111,9 @@ public class MainActivity extends Activity implements View.OnClickListener, View
                             eventType = xmlPullParser.next();
                             Log.d("myWeather", "fifthWeather date:    " + xmlPullParser.getText());
                             String date[] = xmlPullParser.getText().split("日");
+                            if(date[1].length() == 2){
+                                date[1] = date[1] + "日";
+                            }
                             fifthWeather.setDate(date[1]);
                             dateCount++;
                             break;
@@ -1199,5 +1248,7 @@ public class MainActivity extends Activity implements View.OnClickListener, View
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
 }
 

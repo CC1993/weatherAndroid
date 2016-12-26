@@ -296,7 +296,7 @@ w        <RelativeLayout
                 android:layout_centerHorizontal="true"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="5.0dip"
-                android:paddingTop="15dp">
+                android:paddingTop="8dp">
                 <TextView
                     android:id="@+id/detail"
                     android:layout_width="wrap_content"
@@ -318,7 +318,7 @@ w        <RelativeLayout
 
             <android.support.v4.view.ViewPager
                 android:layout_width="fill_parent"
-                android:layout_height="250dp"
+                android:layout_height="220dp"
                 android:id="@+id/week_broadcast"
                 android:layout_alignParentBottom="true"
                 ></android.support.v4.view.ViewPager>
